@@ -1,5 +1,6 @@
 package com.traineeship.project;
 
+import com.traineeship.hibernate.Service;
 import com.traineeship.logger.LoggerNames;
 import com.traineeship.projectInterfaces.Student;
 import org.apache.log4j.Logger;
@@ -22,7 +23,7 @@ public class StudentImpl implements Student {
     private static final Logger LOGGER = Logger.getLogger(LoggerNames.CORE.name());
     @Id
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @Column(name = "student_name")
     private String name;
@@ -35,7 +36,7 @@ public class StudentImpl implements Student {
 
     /**
      * Конструктор - Создание объекта StudentImpl
-     * @see StudentImpl#StudentImpl(String,Long,Calendar)
+     * @see StudentImpl#StudentImpl(Long,String,Long,Calendar)
      */
     public StudentImpl() {
         LOGGER.info("Создался пустой объект Студент");
@@ -48,12 +49,15 @@ public class StudentImpl implements Student {
      * @param birthDate - Дата рождения студента
      * @see StudentImpl#StudentImpl()
      */
-    public StudentImpl(String name, Long group, Calendar birthDate) {
+    public StudentImpl(Long id,String name, Long group, Calendar birthDate) {
+        this.id = id;
         this.name = name;
         this.group = group;
         this.birthDate = birthDate;
         LOGGER.info("Создан студент: " + name + " " + group + " " + birthDate);
     }
+
+
 
     /**
      * Функция получения имени студента
@@ -69,8 +73,8 @@ public class StudentImpl implements Student {
      * @param name - имя студента
      */
     public void setName(String name) {
-        LOGGER.info("Установили имя: " + this.name);
         this.name = name;
+        LOGGER.info("Установили имя: " + this.name);
     }
 
     /**
@@ -87,8 +91,8 @@ public class StudentImpl implements Student {
      * @param group - номер группы сдудента
      */
     public void setGroup(Long group) {
-        LOGGER.info("Установили группу: " + this.group);
         this.group = group;
+        LOGGER.info("Установили группу: " + this.group);
     }
 
     /**
@@ -96,16 +100,39 @@ public class StudentImpl implements Student {
      * @return birthDate
      */
     public Calendar getBirthDate() {
-        LOGGER.info("Получили дату рождения: " + birthDate);
+
         return birthDate;
     }
+
+
 
     /**
      * Функция определения даты рождения студента
      * @param birthDate - дата рождения студента
      */
     public void setBirthDate(Calendar birthDate) {
-        LOGGER.info("Установили дату рождения: " + this.birthDate);
         this.birthDate = birthDate;
+        LOGGER.info("Установили дату рождения: " + this.birthDate);
     }
+
+    /**
+     * Функция получения имени студента
+     * @return name
+     */
+    public Long getId() {
+        LOGGER.info("Получили дату рождения: " + birthDate);
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+        LOGGER.info("Установили id: " + this.id);
+    }
+
+
+    public  void equals(){
+
+
+    }
+
 }

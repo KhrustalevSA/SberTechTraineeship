@@ -81,7 +81,6 @@ public class StudentServiceImpl extends ServiceBase<StudentImpl> {
      * @exception SQLException - ошибка SQL кода
      */
     public Student getOld(String name)  {
-        //TODO
         try{
             LOGGER.info("Программа подключает драйвер Базы данных:"+ dateBaseDriver + " и подключается по URL: jdbc:h2:mem:test");
             Student student = new StudentImpl();

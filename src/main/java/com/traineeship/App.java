@@ -3,6 +3,8 @@ package com.traineeship;
 import com.traineeship.config.ApplicationConfig;
 import com.traineeship.config.ConfigFactory;
 import com.traineeship.config.DataBaseConfig;
+import com.traineeship.project.StudentImpl;
+import com.traineeship.projectInterfaces.Student;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -11,6 +13,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.*;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -21,6 +25,27 @@ public class App {
         final String url = "jdbc:h2:mem:test";
 
         try{
+
+            Student student = new StudentImpl();
+            student.setId(1L);
+            student.setName("Иван");
+            student.setGroup(90301L);
+            Calendar student_birthDate = new GregorianCalendar();
+            student_birthDate.set(Calendar.YEAR, 1998);
+            student_birthDate.set(Calendar.MONTH, 11);
+            student_birthDate.set(Calendar.DAY_OF_MONTH,26);
+
+
+
+
+
+
+
+
+
+
+
+
             Class.forName(db_driver);
             Connection connection = DriverManager.getConnection("jdbc:h2:mem:test");
             Statement statement = connection.createStatement();

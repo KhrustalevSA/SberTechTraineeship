@@ -53,6 +53,7 @@ public class StudentServiceTest {
 
     @Test
     public void testGetStudent() {
+        long id = 1;
         String student_name = "Сергей";
         long student_group = 40931;
         Calendar student_birthDate = new GregorianCalendar();
@@ -60,7 +61,7 @@ public class StudentServiceTest {
         student_birthDate.set(Calendar.MONTH, 03);
         student_birthDate.set(Calendar.DAY_OF_MONTH,04);
 
-        Student student = new StudentImpl(student_name,student_group,student_birthDate);
+        Student student = new StudentImpl(id,student_name,student_group,student_birthDate);
         //service.add(student);
 
         //Assert.assertSame(student,service.get(student_name));
@@ -78,15 +79,36 @@ public class StudentServiceTest {
         student_birthDate.set(Calendar.MONTH, 11);
         student_birthDate.set(Calendar.DAY_OF_MONTH,26);
 
-        Student student = new StudentImpl(student_name,student_group,student_birthDate);
+        Student student = new StudentImpl(id,student_name,student_group,student_birthDate);
         service.add(student);
 
-        //Assert.assertEquals(student,service.get(student_name));
-        Assert.assertTrue( Objects.equals(student.getName(), service.find(1)));
+
+        Assert.assertTrue(String.valueOf(true), service.equalsStudents(student,id));
 
     }
+
+    @Test
+    public void testAddAndUpdateStudent() {
+        long id = 1;
+        String student_name = "Иван";
+        long student_group = 90301;
+        Calendar student_birthDate = new GregorianCalendar();
+        student_birthDate.set(Calendar.YEAR, 1998);
+        student_birthDate.set(Calendar.MONTH, 11);
+        student_birthDate.set(Calendar.DAY_OF_MONTH,26);
+
+        Student student = new StudentImpl(id,student_name,student_group,student_birthDate);
+        service.addOrUpdate(student);
+        student_name = "Артем";
+        student.setName(student_name);
+        service.addOrUpdate(student);
+
+        Assert.assertTrue(String.valueOf(true), service.equalsStudents(student,id));
+
+    }
+
 }
-// Попробовать перенести нотации hibernate (@id,@Table...) на интерфейс
+// Попробовать перенести нотации hibernate (@id,@Table...) на интерфейс ( - )
 // Метод addOrUpdate(Проверка на наличие если есть - изменяет), delete\remove, find(id), add id in Table(PK), find по критериям, find<T value>, Лог (RunTimeExc), Method findAll(select * from)
 // метод update(value): 1) Проверить наличие в бд, 2) Если есть сравнить, 3) Если отличаются: Заменить и обновить (id - не меняется)
 // Почистить

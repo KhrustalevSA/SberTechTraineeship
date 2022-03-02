@@ -1,5 +1,7 @@
 package com.traineeship.projectInterfaces;
 
+import com.traineeship.hibernate.Service;
+
 import java.io.Serializable;
 import java.util.Calendar;
 
@@ -9,6 +11,12 @@ import java.util.Calendar;
  * @since 06.10.2021
  */
 public interface Student extends Serializable {
+    /**
+     * Возвращает ID студента
+     * @return ID
+     */
+    Long getId();
+
     /**
      * Возвращает ФИО студента
      * @return ФИО
@@ -29,6 +37,12 @@ public interface Student extends Serializable {
 
     /**
      * Присваивает имя студенту
+     * @param id
+     */
+    void setId(Long id);
+
+    /**
+     * Присваивает имя студенту
      * @param name
      */
     void setName(String name);
@@ -44,4 +58,6 @@ public interface Student extends Serializable {
      * @param birthDate
      */
     void setBirthDate(Calendar birthDate);
+
+    public void equals();
 }
