@@ -1,8 +1,7 @@
-package com.traineeship.student;
+package com.traineeship.projectInterfaces;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Scanner;
 
 /**
  * Интерфес, описывающий состояние студента
@@ -44,6 +43,5 @@ public interface Student extends Serializable {
      * Устанавливает дату рождения студента
      * @param birthDate
      */
-
     void setBirthDate(Calendar birthDate);
 }

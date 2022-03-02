@@ -1,4 +1,4 @@
-package com.traineeship.student;
+package com.traineeship.projectInterfaces;
 
 /**
  * Интерфес, описывающий сервис для работы со студентами

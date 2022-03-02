@@ -1,10 +1,12 @@
-package org.traineeship.student;
+package com.traineeship.studentTest;
 
 
-import com.traineeship.student.Student;
-import com.traineeship.student.StudentImpl;
-import com.traineeship.student.StudentService;
-import com.traineeship.student.StudentServiceImpl;
+import com.traineeship.hibernate.ServiceBase;
+import com.traineeship.projectInterfaces.Student;
+import com.traineeship.project.StudentImpl;
+import com.traineeship.projectInterfaces.StudentService;
+import com.traineeship.project.StudentServiceImpl;
+import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,17 +19,17 @@ import java.util.Objects;
 public class StudentServiceTest {
 
     private static final String db_driver = "org.h2.Driver";
-    private static StudentService service = new StudentServiceImpl(db_driver);
+    private static ServiceBase service = new StudentServiceImpl();
 
-    @BeforeClass
+
     public static void init() {
-        //TODO подготовить БД
         try{
             Class.forName(db_driver);
             Connection connection = DriverManager.getConnection("jdbc:h2:mem:test");
             Statement statement = null;
             statement = connection.createStatement();
             String SQL = "CREATE TABLE IF NOT EXISTS STUDENTS " +
+                    "(id numeric Primary Key not null, " +
                     "(student_name VARCHAR(50), " +
                     " group_namber INTEGER(6), " +
                     " birthday DATE (8)) ";
@@ -62,13 +64,13 @@ public class StudentServiceTest {
         //service.add(student);
 
         //Assert.assertSame(student,service.get(student_name));
-        Assert.assertTrue(Objects.equals(student.getName(),service.get(student_name).getName()));
+        //Assert.assertTrue(Objects.equals(student.getName(),service.get(student_name).getName()));
 
     }
 
     @Test
     public void testAddStudent() {
-
+        long id = 1;
         String student_name = "Иван";
         long student_group = 90301;
         Calendar student_birthDate = new GregorianCalendar();
@@ -80,7 +82,11 @@ public class StudentServiceTest {
         service.add(student);
 
         //Assert.assertEquals(student,service.get(student_name));
-        Assert.assertTrue( Objects.equals(student.getName(), service.get(student_name).getName()));
+        Assert.assertTrue( Objects.equals(student.getName(), service.find(1)));
 
     }
 }
+// Попробовать перенести нотации hibernate (@id,@Table...) на интерфейс
+// Метод addOrUpdate(Проверка на наличие если есть - изменяет), delete\remove, find(id), add id in Table(PK), find по критериям, find<T value>, Лог (RunTimeExc), Method findAll(select * from)
+// метод update(value): 1) Проверить наличие в бд, 2) Если есть сравнить, 3) Если отличаются: Заменить и обновить (id - не меняется)
+// Почистить
