@@ -83,7 +83,7 @@ public class StudentServiceTest {
         service.add(student);
 
 
-        Assert.assertTrue(String.valueOf(true), service.equalsStudents(student,id));
+        Assert.assertTrue(String.valueOf(true), service.equalsStudents(student, (Student) service.get(Student.class,1L)));
 
     }
 
@@ -96,14 +96,52 @@ public class StudentServiceTest {
         student_birthDate.set(Calendar.YEAR, 1998);
         student_birthDate.set(Calendar.MONTH, 11);
         student_birthDate.set(Calendar.DAY_OF_MONTH,26);
-
-        Student student = new StudentImpl(id,student_name,student_group,student_birthDate);
-        service.addOrUpdate(student);
+        Student student1 = new StudentImpl(id,student_name,student_group,student_birthDate);
+        id = 2;
         student_name = "Артем";
-        student.setName(student_name);
-        service.addOrUpdate(student);
+        student_group = 90302;
+        student_birthDate.set(Calendar.YEAR, 1999);
+        student_birthDate.set(Calendar.MONTH, 4);
+        student_birthDate.set(Calendar.DAY_OF_MONTH,13);
+        Student student2 = new StudentImpl(id,student_name,student_group,student_birthDate);
 
-        Assert.assertTrue(String.valueOf(true), service.equalsStudents(student,id));
+
+        service.addOrUpdate(student1);
+        service.addOrUpdate(student2);
+        student_name = "Игорь";
+        student1.setName(student_name);
+        service.addOrUpdate(student1);
+
+        Assert.assertTrue(String.valueOf(true), service.equalsStudents(student1,student2));
+
+    }
+
+    @Test
+    public void testUpdateStudent() {
+        long id = 1;
+        String student_name = "Иван";
+        long student_group = 90301;
+        Calendar student_birthDate = new GregorianCalendar();
+        student_birthDate.set(Calendar.YEAR, 1998);
+        student_birthDate.set(Calendar.MONTH, 11);
+        student_birthDate.set(Calendar.DAY_OF_MONTH,26);
+        Student student1 = new StudentImpl(id,student_name,student_group,student_birthDate);
+        id = 2;
+        student_name = "Артем";
+        student_group = 90302;
+        student_birthDate.set(Calendar.YEAR, 1999);
+        student_birthDate.set(Calendar.MONTH, 4);
+        student_birthDate.set(Calendar.DAY_OF_MONTH,13);
+        Student student2 = new StudentImpl(id,student_name,student_group,student_birthDate);
+
+
+        service.add(student1);
+        service.add(student2);
+        student_name = "Игорь";
+        student1.setName(student_name);
+        service.Update(student1,1L);
+
+        Assert.assertTrue(String.valueOf(true), service.equalsStudents(student1,student2));
 
     }
 
@@ -112,3 +150,6 @@ public class StudentServiceTest {
 // Метод addOrUpdate(Проверка на наличие если есть - изменяет), delete\remove, find(id), add id in Table(PK), find по критериям, find<T value>, Лог (RunTimeExc), Method findAll(select * from)
 // метод update(value): 1) Проверить наличие в бд, 2) Если есть сравнить, 3) Если отличаются: Заменить и обновить (id - не меняется)
 // Почистить
+
+//Добавить 2 таблицы: 1)Курс ( ) 2)Факультет (), доработать связки таблиц от Студента, сделать сервисы
+//Студент: добавить регистрация на факультет и на курс при добавлении @OneToOne @OneToMany и др
