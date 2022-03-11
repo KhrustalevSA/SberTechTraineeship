@@ -1,7 +1,5 @@
 package com.traineeship.projectInterfaces;
 
-import com.traineeship.hibernate.Service;
-
 import java.io.Serializable;
 import java.util.Calendar;
 
@@ -59,5 +57,6 @@ public interface Student extends Serializable {
      */
     void setBirthDate(Calendar birthDate);
 
-    public void equals();
+    public boolean equals(Object object);
+    public boolean equals(Student student1, Student student2);
 }

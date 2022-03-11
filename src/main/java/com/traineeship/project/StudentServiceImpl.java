@@ -18,9 +18,8 @@ import java.util.Objects;
  * @since 27.02.2022
  */
 public class StudentServiceImpl extends ServiceBase<StudentImpl> {
-    private final String dateBaseDriver = "a";
     private static final Logger LOGGER = Logger.getLogger(LoggerNames.CORE.name());
-
+    String dateBaseDriver = "a";
     /**
      * Конструктор - Создание объекта StudentServiceImpl
      */
@@ -95,17 +94,6 @@ public class StudentServiceImpl extends ServiceBase<StudentImpl> {
 
             while (resultSet.next()){
 
-                /*
-                String  initials = resultSet.getString(1);
-                String  group_name = resultSet.getString(2);
-                String  birthday = resultSet.getString(3);
-
-                System.out.println("initials: " + initials);
-                System.out.println("group_name: " + group_name);
-                System.out.println("birthday: " + birthday);
-                System.out.println("===================\n");
-                 */
-
                 LOGGER.info("Получение студента");
                 if (Objects.equals(resultSet.getString(1), name)){
 
@@ -127,8 +115,6 @@ public class StudentServiceImpl extends ServiceBase<StudentImpl> {
             e.printStackTrace(); // обработка ошибок  DriverManager.getConnection
             LOGGER.error("Ошибка SQL !");
         }
-
-
         return null;
     }
 

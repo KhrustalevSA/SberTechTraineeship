@@ -1,7 +1,6 @@
 package com.traineeship.hibernate;
 
 import com.traineeship.logger.LoggerNames;
-import com.traineeship.projectInterfaces.Student;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,7 +8,8 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import java.util.Objects;
+
+import java.lang.reflect.Field;
 
 public abstract class ServiceBase<T> implements Service<T> {
 
@@ -35,7 +35,7 @@ public abstract class ServiceBase<T> implements Service<T> {
     public T get(T value, Long id){
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        if (value != null){
+        if (session.get(clazz,id) != null){
             T val = session.get(clazz,id);
             session.close();
            return val;
@@ -64,7 +64,7 @@ public abstract class ServiceBase<T> implements Service<T> {
         session.close();
     }
 
-    public void Update(T value, Long id){
+    public void UpdateA(T value, Long id){
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
@@ -74,33 +74,80 @@ public abstract class ServiceBase<T> implements Service<T> {
     }
 
     @Override
-    public boolean equalsObjects(T value1, Long id){
+    public boolean equals(Object value){
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        T value2 = (T) session.get(clazz, id);
-        String[] columnNames = (String[]) sessionFactory.getClassMetadata(clazz).getPropertyValues(value1);
+        Field[] fieldsValue = value.getClass().getDeclaredFields();
 
-        for (int i = 0; i <= columnNames.length; i++){
-            if(true);
+        try {
+            Field id = value.getClass().getDeclaredField("id");
+            id.setAccessible(true);
+            T value2 = session.get(clazz, (long) id.get(value));
+            Field[] fieldsThis = value2.getClass().getDeclaredFields();
+            for(int i=0; i < fieldsValue.length; i += 1){
+
+
+                Field fieldThis = fieldsThis[i];
+                Field fieldValue = fieldsValue[i];
+                fieldThis.setAccessible(true);
+                fieldValue.setAccessible(true);
+                Object fieldThisValue = fieldThis.get(value2);
+                Object fieldValueValue = fieldValue.get(value);
+
+                if (fieldThisValue == fieldValueValue){
+                    System.out.println(fieldThis.get(value2)+ " = " + fieldValue.get(value));
+                } else {
+                    System.out.println(fieldThis.get(value2)+ " != " + fieldValue.get(value) + " Don't done");
+                }
+            }
+
+
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
         }
 
         session.close();
         return false;
     }
 
+
+
     @Override
-    public boolean equalsObjectsFunc(T value1, T value2){
-        String[] columnNames = sessionFactory.getClassMetadata(clazz).getPropertyNames();
-        String idName = sessionFactory.getClassMetadata(clazz).getIdentifierPropertyName();
-        // ----> clazz.getMethods()
+    public boolean equals(T value1, Long id){
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        T value2 = (T) session.get(clazz, id);
+
+        if(value2.equals(value1)){
+            session.close();
+            return true;
+        }
+
+        session.close();
         return false;
     }
 
-    public void UpdateStudent(Student student){
+    public void Update(T value, Long id){
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        if(session.get(clazz, id) != null){
+            if(session.get(clazz, id) != value){
+                session.update(value);
+                transaction.commit();
+            } else {
+                LOGGER.debug("Объекты одинаковы");
+            }
+        }
+
+
+        session.close();
+    }
+
+    /*public void UpdateStudent(Student student){
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         if(session.get(Student.class, student.getId()) != null){
-            if(!equalsStudents(student,session.get(Student.class, student.getId()))){
+            if(!equals(student,session.get(Student.class, student.getId()))){
                 session.update(student);
             } else {
                 LOGGER.debug("Нечего изменять");
@@ -109,24 +156,8 @@ public abstract class ServiceBase<T> implements Service<T> {
 
         transaction.commit();
         session.close();
-    }
+    }*/
 
 
-    @Override
-    public boolean equalsStudents(Student student1, Student student2){
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-
-        if(Objects.equals(student1.getId(),student2.getId()) &&
-                Objects.equals(student1.getName(),student2.getName()) &&
-                Objects.equals(student1.getGroup(),student2.getGroup()) &&
-                Objects.equals(student1.getBirthDate(),student2.getBirthDate()))
-        {
-            session.close();
-            return true;
-        }
-        session.close();
-        return false;
-    }
 
 }

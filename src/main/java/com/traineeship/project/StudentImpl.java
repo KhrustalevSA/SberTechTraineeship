@@ -1,14 +1,12 @@
 package com.traineeship.project;
 
-import com.traineeship.hibernate.Service;
 import com.traineeship.logger.LoggerNames;
 import com.traineeship.projectInterfaces.Student;
 import org.apache.log4j.Logger;
 import java.util.Calendar;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -24,7 +22,6 @@ public class StudentImpl implements Student {
     @Id
     @Column(name = "id")
     private Long id;
-
     @Column(name = "student_name")
     private String name;
 
@@ -115,6 +112,20 @@ public class StudentImpl implements Student {
         LOGGER.info("Установили дату рождения: " + this.birthDate);
     }
 
+
+    @Override
+    public boolean equals(Object object){
+        return (this == object);
+    }
+
+    @Override
+    public boolean equals(Student student1, Student student2){
+        return (Objects.equals(student1.getId(),student2.getId()) &&
+                Objects.equals(student1.getName(),student2.getName()) &&
+                Objects.equals(student1.getGroup(),student2.getGroup()) &&
+                Objects.equals(student1.getBirthDate(),student2.getBirthDate()));
+    }
+
     /**
      * Функция получения имени студента
      * @return name
@@ -130,9 +141,6 @@ public class StudentImpl implements Student {
     }
 
 
-    public  void equals(){
 
-
-    }
 
 }
