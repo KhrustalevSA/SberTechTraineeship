@@ -3,8 +3,10 @@ package com.traineeship.project;
 import com.traineeship.logger.LoggerNames;
 import com.traineeship.projectInterfaces.Student;
 import org.apache.log4j.Logger;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Calendar;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -31,12 +33,14 @@ public class StudentImpl implements Student {
     @Column(name = "birthday")
     private Calendar birthDate;
 
+
+
     /**
      * Конструктор - Создание объекта StudentImpl
      * @see StudentImpl#StudentImpl(Long,String,Long,Calendar)
      */
     public StudentImpl() {
-        LOGGER.info("Создался пустой объект Студент");
+        LOGGER.debug("Создался пустой объект Студент");
     }
 
     /**
@@ -115,16 +119,32 @@ public class StudentImpl implements Student {
 
     @Override
     public boolean equals(Object object){
-        return (this == object);
+        if(object instanceof StudentImpl ) {
+            if (this == object){
+                return true;
+            } else {
+                StudentImpl val = (StudentImpl) object;
+                return compare(this.getId(),val.getId()) &&
+                       compare(this.getName(),val.getName()) &&
+                       compare(this.getGroup(), val.getGroup()) &&
+                       compare(this.getBirthDate(), val.getBirthDate());
+            }
+        } else {
+            return false;
+        }
+
+
+    }
+    private boolean compare(Object obj1, Object obj2){
+        if(obj1 == null && obj2 == null){
+            return true;
+        } else if(obj1 != null && obj2 != null){
+            return obj1.equals(obj2);
+        } else {
+            return false;
+        }
     }
 
-    @Override
-    public boolean equals(Student student1, Student student2){
-        return (Objects.equals(student1.getId(),student2.getId()) &&
-                Objects.equals(student1.getName(),student2.getName()) &&
-                Objects.equals(student1.getGroup(),student2.getGroup()) &&
-                Objects.equals(student1.getBirthDate(),student2.getBirthDate()));
-    }
 
     /**
      * Функция получения имени студента
@@ -139,8 +159,5 @@ public class StudentImpl implements Student {
         this.id = id;
         LOGGER.info("Установили id: " + this.id);
     }
-
-
-
 
 }

@@ -36,14 +36,23 @@ public abstract class ConfigBase implements Config {
     @Override
     public String getProperty(String propertyKey){
         LOGGER.log(Level.INFO, "Получение настройки по ключу:" + propertyKey);
-        return properties.isEmpty() ? null : properties.getProperty(propertyKey);
+
+        if (properties.isEmpty()) {
+            LOGGER.error("Properties don't found");
+            return null;
+        } else if (properties.getProperty(propertyKey) == null) {
+            LOGGER.error("Property don't found");
+            return null;
+        } else {
+            return properties.getProperty(propertyKey);
+        }
     }
 
     /**
      * Функция загрузки конфига
      * @exception IOException - ошибка чтения файла
      */
-    public void load(){
+    public void load() {
         try {
             File file = new File(pathName);
             properties.load(new FileReader(file));

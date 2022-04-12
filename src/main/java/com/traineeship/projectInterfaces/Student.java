@@ -58,5 +58,4 @@ public interface Student extends Serializable {
     void setBirthDate(Calendar birthDate);
 
     public boolean equals(Object object);
-    public boolean equals(Student student1, Student student2);
 }

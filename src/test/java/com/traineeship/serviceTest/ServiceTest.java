@@ -1,4 +1,4 @@
-package com.traineeship.studentTest;
+package com.traineeship.serviceTest;
 
 
 import com.traineeship.hibernate.ServiceBase;
@@ -11,11 +11,14 @@ import org.junit.Test;
 import java.sql.*;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Objects;
 
-public class StudentServiceTest {
+public class ServiceTest {
 
     private static final String db_driver = "org.h2.Driver";
-    private static ServiceBase service = new StudentServiceImpl();
+    private static ServiceBase facultyService = new FacultyServiceImpl();
+    private static ServiceBase studentService = new StudentServiceImpl();
+    private static ServiceBase yearService = new YearServiceImpl();
 
 
     public static void init() {
@@ -60,11 +63,12 @@ public class StudentServiceTest {
         student_birthDate.set(Calendar.DAY_OF_MONTH,26);
 
         Student student = new StudentImpl(id,student_name,student_group,student_birthDate);
-        service.add(student);
+        studentService.add(student);
         student.setId(2L);
-        service.add(student);
+        studentService.add(student);
 
-        Assert.assertTrue(String.valueOf(true), student.equals(service.get(student,student.getId()))); // service.equals(student, (Student) service.get(Student.class,1L))
+        studentService.equals(student);
+       Assert.assertTrue(String.valueOf(true), student.equals(studentService.get(student,student.getId()))); // service.equals(student, (Student) service.get(Student.class,1L))
 
     }
 
@@ -75,10 +79,10 @@ public class StudentServiceTest {
         long yearsQuantity = 4;
 
         Faculty faculty = new FacultyImpl(id,faculty_name,yearsQuantity);
-        service.add(faculty);
+        facultyService.add(faculty);
+        facultyService.get(faculty,faculty.getId());
 
-
-        Assert.assertTrue(String.valueOf(true), faculty.equals(service.get(faculty,faculty.getId()))); // service.equals(student, (Student) service.get(Student.class,1L))
+        Assert.assertTrue(String.valueOf(true), faculty.equals(facultyService.get(faculty,faculty.getId()))); // service.equals(student, (Student) service.get(Student.class,1L))
 
     }
 
@@ -93,10 +97,40 @@ public class StudentServiceTest {
         student_birthDate.set(Calendar.DAY_OF_MONTH,04);
 
         Student student = new StudentImpl(id,student_name,student_group,student_birthDate);
-        service.add(student);
-        service.get(student,student.getId());
+        studentService.add(student);
+        studentService.get(student,student.getId());
 
-        Assert.assertTrue(String.valueOf(true),student.equals(service.get(student,student.getId())));
+        Assert.assertTrue(String.valueOf(true),student.equals(studentService.get(student,student.getId())));
+
+    }
+
+    @Test
+    public void testGetFaculty() {
+        long id = 1;
+        String faculty_name = "ИИВТ";
+        long yearsQuantity = 4;
+
+        Faculty faculty = new FacultyImpl(id,faculty_name,yearsQuantity);
+        facultyService.add(faculty);
+        facultyService.get(faculty,faculty.getId());
+
+        Assert.assertTrue(String.valueOf(true),faculty.equals(facultyService.get(faculty,faculty.getId())));
+
+    }
+
+    @Test
+    public void testGetYear() {
+
+        Long id = 1L;
+        long startYear = 2009L;
+        Long yearNow = 2010L;
+        Long studentsQuantity = 21L;
+
+        Year year = new YearImpl(id,startYear,yearNow,studentsQuantity);
+        yearService.add(year);
+        yearService.get(year,year.getId());
+
+        Assert.assertTrue(String.valueOf(true),year.equals(yearService.get(year,year.getId())));
 
     }
 
@@ -121,13 +155,13 @@ public class StudentServiceTest {
         Student student2 = new StudentImpl(id,student_name,student_group,student_birthDate);
 
 
-       // studentService.addOrUpdate(student1);
-       // studentService.addOrUpdate(student2);
+        studentService.addOrUpdate(student1);
+        studentService.addOrUpdate(student2);
         student_name = "Игорь";
         student1.setName(student_name);
-       // studentService.addOrUpdate(student1);
+        studentService.addOrUpdate(student1);
 
-        Assert.assertTrue(String.valueOf(true), student1.equals(student2)); //service.equals(student1,student2)
+        Assert.assertTrue(String.valueOf(true), Objects.equals(student1.getName(), student_name)); //service.equals(student1,student2)
 
     }
 
@@ -141,22 +175,36 @@ public class StudentServiceTest {
         student_birthDate.set(Calendar.MONTH, 11);
         student_birthDate.set(Calendar.DAY_OF_MONTH,26);
         Student student1 = new StudentImpl(id,student_name,student_group,student_birthDate);
-        id = 2;
-        student_name = "Артем";
-        student_group = 90302;
-        student_birthDate.set(Calendar.YEAR, 1999);
-        student_birthDate.set(Calendar.MONTH, 4);
-        student_birthDate.set(Calendar.DAY_OF_MONTH,13);
-        Student student2 = new StudentImpl(id,student_name,student_group,student_birthDate);
 
 
-        //studentService.add(student1);
-        //studentService.add(student2);
+
+        studentService.add(student1);
         student_name = "Игорь";
         student1.setName(student_name);
-        //studentService.Update(student1,1L);
+        studentService.Update(student1);
 
-       // Assert.assertTrue(String.valueOf(true), studentService.equals(student1,student1.getId()));
+        Assert.assertTrue(String.valueOf(true), Objects.equals(student1.getName(), student_name));
+
+    }
+
+    @Test
+    public void testDeleteStudent() {
+        long id = 1;
+        String student_name = "Иван";
+        long student_group = 90301;
+        Calendar student_birthDate = new GregorianCalendar();
+        student_birthDate.set(Calendar.YEAR, 1998);
+        student_birthDate.set(Calendar.MONTH, 11);
+        student_birthDate.set(Calendar.DAY_OF_MONTH,26);
+        Student student1 = new StudentImpl(id,student_name,student_group,student_birthDate);
+
+
+
+        studentService.add(student1);
+
+        studentService.delete(student1,student1.getId());
+
+        Assert.assertTrue(String.valueOf(true), studentService.get(student1,student1.getId()) == null);
 
     }
 
@@ -168,3 +216,8 @@ public class StudentServiceTest {
 
 //Добавить 2 таблицы: 1)Курс ( ) 2)Факультет (), доработать связки таблиц от Студента, сделать сервисы
 //Студент: добавить регистрация на факультет и на курс при добавлении @OneToOne @OneToMany и др
+
+
+// как развернуть postgres/MySQL
+// модификаторы доступа, типы переменных(+ базовые классы), Коллекции(понимание), умение писать потоки, и др, (тернарн), синтаксис, SQl
+// docer

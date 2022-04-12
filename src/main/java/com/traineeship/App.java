@@ -1,65 +1,47 @@
 package com.traineeship;
 
 
-import com.traineeship.project.StudentImpl;
+import com.traineeship.hibernate.ServiceBase;
+import com.traineeship.logger.LoggerNames;
+import com.traineeship.project.*;
+import com.traineeship.projectInterfaces.Faculty;
 import com.traineeship.projectInterfaces.Student;
+import org.apache.log4j.Logger;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 
 public class App {
+    private static final Logger LOGGER = Logger.getLogger(LoggerNames.DATABASE.name());
+    //private static final ServiceBase studentService = new StudentServiceImpl();
+    private static final ServiceBase SERVICE = new FacultyServiceImpl();
+    //private static final ServiceBase yearService = new YearServiceImpl();
+
     public static void main(String[] args) {
 
-
-        try{
-            long id = 1;
-            String student_name = "Иван";
-            long student_group = 90301;
+        try {
             Calendar student_birthDate = new GregorianCalendar();
-            student_birthDate.set(Calendar.YEAR, 1998);
-            student_birthDate.set(Calendar.MONTH, 11);
-            student_birthDate.set(Calendar.DAY_OF_MONTH,26);
+            student_birthDate.set(Calendar.YEAR, 2001);
+            student_birthDate.set(Calendar.MONTH, 03);
+            student_birthDate.set(Calendar.DAY_OF_MONTH,04);
+            Student student = new StudentImpl(3L,"Иван",40931L,student_birthDate);
 
-            Student student1 = new StudentImpl(id,student_name,student_group,student_birthDate);
-
-             id = 2;
-             student_name = "Sergey";
-             student_group = 90302;
-
-            student_birthDate.set(Calendar.YEAR, 1998);
-            student_birthDate.set(Calendar.MONTH, 11);
-            student_birthDate.set(Calendar.DAY_OF_MONTH,26);
-
-            Student student2 = new StudentImpl(id,student_name,student_group,student_birthDate);
+            Faculty faculty = new FacultyImpl(1L,"IMEIKN",4L);
 
 
-             id = 3;
-             student_name = "Иван";
-             student_group = 90301;
-
-            student_birthDate.set(Calendar.YEAR, 1998);
-            student_birthDate.set(Calendar.MONTH, 11);
-            student_birthDate.set(Calendar.DAY_OF_MONTH,26);
-
-            Student student3 = new StudentImpl(id,student_name,student_group,student_birthDate);
-
-            if(student1.equals(student1)) System.out.println("Object1");
-            if(student1.equals(student2)) System.out.println("Object2");
-            if(student1.equals(student3)) System.out.println("Object3");
-
-            if(student1.equals(student1,student1)) System.out.println("Student1 Student1");
-            if(student1.equals(student1,student2)) System.out.println("Student1 Student2");
-            if(student1.equals(student1,student3)) System.out.println("Student1 Student3");
+            SERVICE.add(student);
+            SERVICE.add(faculty);
 
 
 
-
-
-
-        }catch (Exception e){
-
+        } catch (Exception e) {
+            e.printStackTrace(); // обработка ошибки  Class.forName
+            LOGGER.error("Error");
         }
 
 
     }
 }
+
+// Проект на MySql, тесты на H2, Code Style, logger.debug() - множественная информация

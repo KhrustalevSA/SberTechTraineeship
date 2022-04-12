@@ -17,8 +17,9 @@ public class ConfigFactory {
     private static final Map<Class, Config> configMap = new HashMap<>();
 
     static{
-        configMap.put(ApplicationConfig.class,loadConfig(ApplicationConfig.class));
-        configMap.put(DataBaseConfig.class,loadConfig(DataBaseConfig.class));
+        configMap.put(ApplicationConfig.class, loadConfig(ApplicationConfig.class));
+        configMap.put(H2DataBaseConfig.class, loadConfig(H2DataBaseConfig.class));
+        configMap.put(MySQLDataBaseConfig.class, loadConfig(MySQLDataBaseConfig.class));
         LOGGER.info("Все конфиги загрузились");
     }
 

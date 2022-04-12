@@ -1,8 +1,10 @@
 package com.traineeship.configTest;
 
 import com.traineeship.config.ConfigFactory;
-import com.traineeship.config.DataBaseConfig;
+import com.traineeship.config.H2DataBaseConfig;
+import com.traineeship.config.MySQLDataBaseConfig;
 import com.traineeship.logger.LogFactory;
+import com.traineeship.logger.LoggerNames;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
@@ -12,13 +14,13 @@ import static org.junit.Assert.*;
 
 public class ConfigTest {
 
+    private static final Logger LOGGER = Logger.getLogger(LoggerNames.DATABASE.name());
+
     @Test
     public void getProperty() throws IOException {
-        LogFactory logFactory = new LogFactory();
-        Logger.getLogger(ConfigFactory.class.getName());
-        String key = "jdbc:h2:mem:test";
+        String key = "jdbc:mysql://localhost:3306/jdbc";
 
-        String property = ConfigFactory.getConfig(DataBaseConfig.class).getProperty("db_url");
+        String property = ConfigFactory.getConfig(MySQLDataBaseConfig.class).getProperty("mySQL_url");
 
         assertEquals(key, property);
     }
@@ -26,7 +28,11 @@ public class ConfigTest {
     @Test
     public void getPropertyFall() throws IOException {
 
+        String key = "jdbc:mysql://localhost:3306/jdbc";
 
+        String property = ConfigFactory.getConfig(MySQLDataBaseConfig.class).getProperty("mySQLl_url");
+
+        assertNotEquals(key, property);
 
     }
 

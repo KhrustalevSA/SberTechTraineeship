@@ -8,14 +8,14 @@ import org.apache.log4j.Logger;
  * @author Khrustalev-sa
  * @since 27.02.2022
  */
-public class DataBaseConfig extends ConfigBase {
+public class H2DataBaseConfig extends ConfigBase {
     private static final Logger LOGGER = Logger.getLogger(LoggerNames.DATABASE.name());
 
     /**
-     * Конструктор - Создание объекта ApplicationConfig для работы с конфигом приложения
+     * Конструктор - Создание объекта ConfigBase для работы с конфигом приложения
      * @see ConfigBase#ConfigBase(String)
      */
-    protected DataBaseConfig() {
+    protected H2DataBaseConfig() {
         super("src/main/resources/db.properties");
         LOGGER.info("Загрузился файл db.properties");
     }
